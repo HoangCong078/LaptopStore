@@ -1,0 +1,20 @@
+# IntelliJ / IDE / VS Code
+.idea/
+*.iml
+out/
+bin/
+.vscode/
+
+# Maven
+target/
+
+# Thong tin bi mat: tuyet doi khong commit
+.env
+.env.*
+config.properties
+/src/main/resources/config.properties
+*.key
+
+# Tep tam/log
+*.log
+.DS_Store
