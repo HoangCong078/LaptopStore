@@ -1,9 +1,11 @@
 USE laptop_store;
 
--- Thêm tài khoản mẫu (Mật khẩu đang để thô cho dễ test ban đầu)
-INSERT INTO accounts (username, password, full_name, role) VALUES 
-('admin', '123456', 'Quản trị viên hệ thống', 'ADMIN'),
-('staff01', '123456', 'Nhân viên Bán hàng 01', 'STAFF');
+-- Tài khoản mẫu. Mật khẩu của cả 2 tài khoản là: 123456
+-- Cột password lưu theo định dạng "saltBase64:hashBase64" (PBKDF2WithHmacSHA256, 120000 vòng, 256 bit).
+-- Không còn lưu mật khẩu thô. Tài khoản mới nên tạo bằng form Đăng ký.
+INSERT INTO accounts (username, password, full_name, role) VALUES
+('admin',   'AQIDBAUGBwgJCgsMDQ4PEA==:RW1MdHjwRlvsM3gqxz4WMQ+c4iddFH8xtK/JW3SlD8A=', 'Quản trị viên hệ thống', 'ADMIN'),
+('staff01', 'ERITFBUWFxgZGhscHR4fIA==:+duRVFAWG/looCJZIh4ke+Ujhi2Mo4bLwjc0Fqg2k6I=', 'Nhân viên Bán hàng 01', 'STAFF');
 
 -- Thêm danh mục sản phẩm mẫu
 INSERT INTO categories (category_name, description) VALUES 
