@@ -1,18 +1,12 @@
 package com.laptopstore;
 
-import com.laptopstore.config.DatabaseConnection;
-import java.sql.Connection;
+import com.formdev.flatlaf.FlatLightLaf;
+import com.laptopstore.view.LoginFrame;
+import javax.swing.SwingUtilities;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println("LaptopStore is ready!");
-        
-        // Kiểm tra kết nối Database
-        Connection conn = DatabaseConnection.getConnection();
-        if (conn != null) {
-            System.out.println(">>> Kiem tra thanh công: Da ket noi duoc voi MySQL database 'laptop_store'!");
-        } else {
-            System.out.println(">>> Loi: Khong the ket noi database. Hay kiem tra lai file config.properties!");
-        }
+        FlatLightLaf.setup(); // giao diện phẳng dùng chung cho cả ứng dụng
+        SwingUtilities.invokeLater(() -> new LoginFrame().setVisible(true));
     }
 }
