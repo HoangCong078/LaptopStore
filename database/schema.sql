@@ -23,16 +23,27 @@ CREATE TABLE IF NOT EXISTS categories (
 CREATE TABLE IF NOT EXISTS laptops (
     laptop_id INT AUTO_INCREMENT PRIMARY KEY,
     laptop_name VARCHAR(255) NOT NULL,
-    brand VARCHAR(50) NOT NULL, 
+    brand VARCHAR(50) NOT NULL,
     category_id INT,
     price DECIMAL(15, 2) NOT NULL,
-    quantity INT DEFAULT 0,
+    quantity INT NOT NULL DEFAULT 0,
     cpu VARCHAR(100),
     ram VARCHAR(50),
     storage VARCHAR(100),
     screen VARCHAR(100),
-    FOREIGN KEY (category_id) REFERENCES categories(category_id) ON DELETE SET NULL
-);
+    tags TEXT,
+
+    CONSTRAINT chk_laptop_price
+    CHECK (price >= 0),
+
+    CONSTRAINT chk_laptop_quantity
+    CHECK (quantity >= 0),
+
+    FOREIGN KEY (category_id)
+    REFERENCES categories(category_id)
+    ON DELETE SET NULL
+    );
+
 
 -- 4. Bảng Hóa đơn bán hàng (Sales / Invoices)
 CREATE TABLE IF NOT EXISTS invoices (
@@ -68,14 +79,27 @@ CREATE TABLE IF NOT EXISTS warranties (
     FOREIGN KEY (laptop_id) REFERENCES laptops(laptop_id) ON DELETE SET NULL
 );
 
--- 7. Bảng Lịch sử kho (Stock Movement)
+-- 7. Bang lich su nhap/xuat kho
 CREATE TABLE IF NOT EXISTS stock_movements (
     movement_id INT AUTO_INCREMENT PRIMARY KEY,
-    laptop_id INT,
+    laptop_id INT NOT NULL,
     account_id INT,
-    movement_type VARCHAR(20), -- IMPORT (Nhập kho), EXPORT (Xuất/Bán)
+    movement_type VARCHAR(20) NOT NULL,
     quantity INT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (laptop_id) REFERENCES laptops(laptop_id) ON DELETE CASCADE,
-    FOREIGN KEY (account_id) REFERENCES accounts(account_id) ON DELETE SET NULL
+
+    CONSTRAINT fk_stock_laptop
+    FOREIGN KEY (laptop_id)
+    REFERENCES laptops(laptop_id)
+    ON DELETE RESTRICT,
+
+    FOREIGN KEY (account_id)
+    REFERENCES accounts(account_id)
+    ON DELETE SET NULL,
+
+    CONSTRAINT chk_movement_quantity
+    CHECK (quantity > 0),
+
+    CONSTRAINT chk_movement_type
+    CHECK (movement_type IN ('IMPORT', 'EXPORT'))
 );
