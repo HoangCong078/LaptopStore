@@ -12,8 +12,15 @@ public class StockMovement {
     private String movementType;
     private int quantity;
     private LocalDateTime createdAt;
-
+    private String employeeName;
     // 2. Constructor khi tao giao dich moi
+    public String getEmployeeName() {
+        return employeeName;
+    }
+
+    public void setEmployeeName(String employeeName) {
+        this.employeeName = employeeName;
+    }
     public StockMovement(int laptopId,
                          Integer accountId,
                          String movementType,

@@ -146,24 +146,30 @@ public class JdbcStockMovementDAO implements StockMovementDAO {
     }
 
     // 5. Lay lich su theo ma laptop
+
     @Override
     public List<StockMovement> findByLaptopId(int laptopId)
             throws SQLException {
 
         if (laptopId <= 0) {
             throw new IllegalArgumentException(
-                    "Ma laptop khong hop le"
+                    "Mã laptop không hợp lệ"
             );
         }
 
         List<StockMovement> movements = new ArrayList<>();
 
         String sql = """
-                SELECT *
-                FROM stock_movements
-                WHERE laptop_id = ?
-                ORDER BY created_at DESC, movement_id DESC
-                """;
+            SELECT
+                sm.*,
+                a.full_name AS employee_name
+            FROM stock_movements sm
+            LEFT JOIN accounts a
+                ON sm.account_id = a.account_id
+            WHERE sm.laptop_id = ?
+            ORDER BY sm.created_at DESC,
+                     sm.movement_id DESC
+            """;
 
         try (PreparedStatement ps =
                      getConnection().prepareStatement(sql)) {
@@ -171,12 +177,23 @@ public class JdbcStockMovementDAO implements StockMovementDAO {
             ps.setInt(1, laptopId);
 
             try (ResultSet rs = ps.executeQuery()) {
+
                 while (rs.next()) {
-                    movements.add(mapResultSet(rs));
+
+                    // Đọc thông tin giao dịch như trước
+                    StockMovement movement = mapResultSet(rs);
+
+                    // Bổ sung tên người thực hiện
+                    movement.setEmployeeName(
+                            rs.getString("employee_name")
+                    );
+
+                    movements.add(movement);
                 }
             }
         }
 
         return movements;
     }
+
 }

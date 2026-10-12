@@ -1,5 +1,5 @@
 package com.laptopstore.view;
-
+import com.laptopstore.model.Account;
 import com.laptopstore.dao.JdbcLaptopDAO;
 import com.laptopstore.dao.LaptopDAO;
 import com.laptopstore.model.Laptop;
@@ -37,9 +37,17 @@ public class LaptopPanel extends JPanel {
     private final StockMovementDAO movementDAO;
     private final JButton historyButton;
     private final JButton deleteButton;
+    private final Account currentAccount;
 
-
+    // Dành cho chương trình Demo
     public LaptopPanel() {
+        this(null);
+    }
+
+    // Dành cho MainFrame sau khi đăng nhập
+    public LaptopPanel(Account account) {
+
+        this.currentAccount = account;
 
         laptopDAO = new JdbcLaptopDAO();
         stockService = new StockService();
@@ -678,7 +686,15 @@ public class LaptopPanel extends JPanel {
     }
 
     private void showImportStockDialog() {
-
+        if (currentAccount == null) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Vui lòng đăng nhập để thực hiện nhập kho!",
+                    "Yêu cầu đăng nhập",
+                    JOptionPane.WARNING_MESSAGE
+            );
+            return;
+        }
         // 1. Kiểm tra dòng được chọn
         int selectedRow = laptopTable.getSelectedRow();
 
@@ -771,7 +787,7 @@ public class LaptopPanel extends JPanel {
                 // null là accountId tạm thời khi kiểm thử
                 return stockService.importStock(
                         laptopId,
-                        null,
+                        currentAccount.getId(),
                         quantity
                 );
             }
@@ -842,7 +858,15 @@ public class LaptopPanel extends JPanel {
     }
 
     private void showExportStockDialog() {
-
+        if (currentAccount == null) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Vui lòng đăng nhập để thực hiện xuất kho!",
+                    "Yêu cầu đăng nhập",
+                    JOptionPane.WARNING_MESSAGE
+            );
+            return;
+        }
         // 1. Kiểm tra đã chọn laptop chưa
         int selectedRow = laptopTable.getSelectedRow();
 
@@ -969,7 +993,7 @@ public class LaptopPanel extends JPanel {
                 // accountId = null chỉ dùng khi kiểm thử
                 return stockService.exportStock(
                         laptopId,
-                        null,
+                        currentAccount.getId(),
                         quantity
                 );
             }
@@ -1098,7 +1122,7 @@ public class LaptopPanel extends JPanel {
                                     "Laptop",
                                     "Loại giao dịch",
                                     "Số lượng",
-                                    "Nhân viên ID",
+                                    "Người thực hiện",
                                     "Thời gian"
                             };
 
@@ -1146,10 +1170,10 @@ public class LaptopPanel extends JPanel {
                                                 : "-" + movement.getQuantity();
 
                                 String accountText =
-                                        movement.getAccountId() == null
+                                        movement.getEmployeeName() == null
+                                                || movement.getEmployeeName().isBlank()
                                                 ? "Chưa xác định"
-                                                : movement.getAccountId().toString();
-
+                                                : movement.getEmployeeName();
                                 String timeText =
                                         movement.getCreatedAt() == null
                                                 ? "Chưa xác định"
