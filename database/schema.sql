@@ -20,10 +20,9 @@ CREATE TABLE IF NOT EXISTS categories (
 );
 
 -- 3. Bảng Sản phẩm (Laptop)
-
 CREATE TABLE IF NOT EXISTS laptops (
-                                       laptop_id INT AUTO_INCREMENT PRIMARY KEY,
-                                       laptop_name VARCHAR(255) NOT NULL,
+    laptop_id INT AUTO_INCREMENT PRIMARY KEY,
+    laptop_name VARCHAR(255) NOT NULL,
     brand VARCHAR(50) NOT NULL,
     category_id INT,
     price DECIMAL(15, 2) NOT NULL,
@@ -80,15 +79,12 @@ CREATE TABLE IF NOT EXISTS warranties (
     FOREIGN KEY (laptop_id) REFERENCES laptops(laptop_id) ON DELETE SET NULL
 );
 
--
-
-
 -- 7. Bang lich su nhap/xuat kho
 CREATE TABLE IF NOT EXISTS stock_movements (
-                                               movement_id INT AUTO_INCREMENT PRIMARY KEY,
-                                               laptop_id INT NOT NULL,
-                                               account_id INT,
-                                               movement_type VARCHAR(20) NOT NULL,
+    movement_id INT AUTO_INCREMENT PRIMARY KEY,
+    laptop_id INT NOT NULL,
+    account_id INT,
+    movement_type VARCHAR(20) NOT NULL,
     quantity INT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
@@ -106,4 +102,4 @@ CREATE TABLE IF NOT EXISTS stock_movements (
 
     CONSTRAINT chk_movement_type
     CHECK (movement_type IN ('IMPORT', 'EXPORT'))
-    );
+);
