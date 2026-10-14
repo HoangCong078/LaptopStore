@@ -41,11 +41,13 @@
     </dependency>
 
     <!-- Gson để xử lý dữ liệu JSON (dùng khi cần gọi API hoặc lưu trữ) -->
+    
     <dependency>
-      <groupId>com.google.code.gson</groupId>
-      <artifactId>gson</artifactId>
-      <version>2.10.1</version>
+        <groupId>com.google.code.gson</groupId>
+        <artifactId>gson</artifactId>
+        <version>2.13.2</version>
     </dependency>
+
   </dependencies>
 
   <build>
