@@ -1,10 +1,14 @@
 package com.laptopstore.view;
 
+import com.laptopstore.dao.LaptopDAO;
 import com.laptopstore.model.Account;
+import com.laptopstore.model.Laptop;
+
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -69,8 +73,24 @@ public class MainFrame extends JFrame {
         addModule(KEY_HOME, "Trang chủ", homePanel, false);
         addModule(KEY_PRODUCTS, "Quản lý Laptop & Kho", new LaptopPanel(currentAccount), false);
         addModule(KEY_SALES, "Bán hàng", new PlaceholderPanel("Bán hàng"), false);
-        addModule(KEY_WARRANTY, "Bảo hành", new PlaceholderPanel("Bảo hành"), false);
-        addModule(KEY_AI, "Tư vấn AI", new PlaceholderPanel("Tư vấn AI"), false);
+        addModule(KEY_WARRANTY, "Bảo hành", new WarrantyPanel(), false);
+        addModule(KEY_AI,  "Tư vấn AI", new AIPanel(() -> {
+            StringBuilder sb = new StringBuilder();
+            try {
+                // Khởi tạo DAO thông qua class cài đặt thực tế của ông (ví dụ LaptopDAOImpl hoặc tương tự)
+                com.laptopstore.dao.LaptopDAO laptopDAO = new com.laptopstore.dao.JdbcLaptopDAO();
+                List<com.laptopstore.model.Laptop> list = laptopDAO.findAll();
+                
+                for (com.laptopstore.model.Laptop l : list) {
+                    sb.append("- ").append(l.getLaptopName()) 
+                    .append(" | Giá: ").append(l.getPrice())
+                    .append(" | Tồn kho: ").append(l.getQuantity()).append("\n");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return sb.toString();
+        }), false);
     }
 
     /** Thêm 1 module vào menu điều hướng. */
