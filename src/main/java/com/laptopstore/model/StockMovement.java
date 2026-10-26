@@ -32,6 +32,17 @@ public class StockMovement {
         setQuantity(quantity);
     }
 
+    // Constructor dung enum StockMovementType (giu nguyen constructor String o tren)
+    public StockMovement(int laptopId,
+                         Integer accountId,
+                         StockMovementType type,
+                         int quantity) {
+
+        this(laptopId, accountId,
+                type == null ? null : type.name(),
+                quantity);
+    }
+
     // 3. Constructor khi doc tu database
     public StockMovement(int movementId,
                          int laptopId,
@@ -102,6 +113,15 @@ public class StockMovement {
         }
 
         this.movementType = movementType;
+    }
+
+    // Lay / gan loai giao dich duoi dang enum
+    public StockMovementType getType() {
+        return StockMovementType.fromString(movementType);
+    }
+
+    public void setType(StockMovementType type) {
+        setMovementType(type == null ? null : type.name());
     }
 
     public int getQuantity() {

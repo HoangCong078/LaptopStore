@@ -6,6 +6,7 @@ import com.laptopstore.dao.JdbcLaptopDAO;
 import com.laptopstore.dao.StockMovementDAO;
 import com.laptopstore.dao.JdbcStockMovementDAO;
 import com.laptopstore.model.StockMovement;
+import com.laptopstore.model.StockMovementType;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -32,7 +33,7 @@ public class StockService {
                 laptopId,
                 accountId,
                 quantity,
-                "IMPORT"
+                StockMovementType.IMPORT
         );
     }
 
@@ -47,7 +48,7 @@ public class StockService {
                 laptopId,
                 accountId,
                 quantity,
-                "EXPORT"
+                StockMovementType.EXPORT
         );
     }
 
@@ -56,7 +57,7 @@ public class StockService {
             int laptopId,
             Integer accountId,
             int quantity,
-            String type
+            StockMovementType type
     ) throws SQLException {
 
         // Kiểm tra dữ liệu đầu vào
@@ -78,7 +79,7 @@ public class StockService {
                 boolean updated;
 
                 // 4. Cập nhật tồn kho
-                if ("IMPORT".equals(type)) {
+                if (type == StockMovementType.IMPORT) {
 
                     updated = laptopDAO.increaseStock(
                             conn,
@@ -86,7 +87,7 @@ public class StockService {
                             quantity
                     );
 
-                } else if ("EXPORT".equals(type)) {
+                } else if (type == StockMovementType.EXPORT) {
 
                     updated = laptopDAO.decreaseStock(
                             conn,
