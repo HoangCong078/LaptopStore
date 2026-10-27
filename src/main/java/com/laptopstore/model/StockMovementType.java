@@ -24,16 +24,12 @@ public enum StockMovementType {
     // Chuyen chuoi lay tu database ("IMPORT"/"EXPORT") thanh enum
     public static StockMovementType fromString(String value) {
         if (value == null || value.isBlank()) {
-            throw new IllegalArgumentException(
-                    "Loai giao dich khong duoc de trong"
-            );
+            return null; // Đổi throw Exception thành return null
         }
         try {
             return valueOf(value.trim().toUpperCase());
         } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException(
-                    "Loai giao dich phai la IMPORT hoac EXPORT"
-            );
+            return null; // Đổi throw Exception thành return null
         }
     }
 
