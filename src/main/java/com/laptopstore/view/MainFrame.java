@@ -72,7 +72,7 @@ public class MainFrame extends JFrame {
         homePanel = new HomePanel(currentAccount);
         addModule(KEY_HOME, "Trang chủ", homePanel, false);
         addModule(KEY_PRODUCTS, "Quản lý Laptop & Kho", new LaptopPanel(currentAccount), false);
-        addModule(KEY_SALES, "Bán hàng", new PlaceholderPanel("Bán hàng"), false);
+        addModule(KEY_SALES, "Bán hàng", new SalesPanel(), false);
         addModule(KEY_WARRANTY, "Bảo hành", new WarrantyPanel(), false);
         addModule(KEY_AI,  "Tư vấn AI", new AIPanel(() -> {
             StringBuilder sb = new StringBuilder();
